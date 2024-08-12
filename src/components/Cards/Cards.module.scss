@@ -1,0 +1,22 @@
+@use "../../assets/scss/mixins.scss" as *;
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 444px;
+    gap: clamp(2.813rem, 1.719rem + 5.47vw, 6.25rem) 24px;
+    
+    @include media(1326px) {
+        grid-template-columns: repeat(3, 306px);
+        justify-content: center;
+    }
+    
+    @include media(996px) {
+        grid-template-columns: repeat(2, 306px);
+        justify-content: center;
+    }
+    
+    @include media(666px) {
+        grid-template-columns: 290px;
+    }
+}

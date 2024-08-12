@@ -1,0 +1,41 @@
+:root {
+    --white: #fff;
+    --black: #000;
+    --border-cl: #005C67;
+    --btn-cl: #062F42;
+    --bg: #BABABA;
+    --tran: .2s
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    background: var(--bg);
+}
+
+.container {
+    max-width: 1326px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.navlink.active {
+    color: var(--border-cl);
+    border-bottom: 1px solid currentColor;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+}
