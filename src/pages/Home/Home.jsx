@@ -5,7 +5,7 @@ import s from "./Home.module.scss"
 const Home = ({options, onApply, onBuyClick, products}) => {
     return (
         <>
-            <Sortbar options={options} productsAmount={products?.length} onApply={onApply} />
+            <Sortbar options={options} products={products} onApply={onApply} />
             <Cards onBuyClick={onBuyClick} products={products} />
         </>
     )

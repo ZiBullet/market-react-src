@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import { getProducts, productsSelector } from "./store/products/productsSlice";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Home from "./pages/Home/Home";
+
 import { sortProducts } from "./utils/sortProducts";
 import Cart from "./pages/Cart/Cart";
 
 const App = () => {
   const dispatch = useDispatch();
+  const {pathname} = useLocation();
   const { data, status } = useSelector(productsSelector);
   const [products, setProducts] = useState(null);
   const [opened, setOpened] = useState(false);
@@ -31,8 +33,13 @@ const App = () => {
     return copiedArr;
   };
 
+  useEffect(() => {
+    dispatch(getProducts());
+    if (status === "ok") setProducts(copyArr(data));
+  }, [status, pathname, dispatch]);
+
   const handleSelect = (productsArr, option) => {
-    if (!productsArr) return;
+    if (!productsArr || !option) return;
 
     const sortedProducts = sortProducts(productsArr, option.type);
     setProducts([...sortedProducts]);
@@ -59,12 +66,7 @@ const App = () => {
     });
   };
 
-  console.log(cartProducts);
-
-  useEffect(() => {
-    dispatch(getProducts());
-    if (status === "ok") setProducts(copyArr(data));
-  }, [status, dispatch]);
+  
 
   const handleToggleClick = () => setOpened(!opened);
   const handleCloseClick = () => setOpened(false);
@@ -94,9 +96,10 @@ const App = () => {
             path="/cart"
             element={
               <Cart
+                cartProducts={cartProducts}
+                onBuyClick={handleBuyClick}
                 onApply={handleSelect}
                 options={options}
-                cartProducts={cartProducts}
               />
             }
           />

@@ -2,11 +2,11 @@ import React from "react";
 import Cards from "../../components/Cards/Cards";
 import Sortbar from "../../components/Sortbar/Sortbar";
 
-const Cart = ({ cartProducts, options, onApply }) => {
+const Cart = ({ options, onApply, onBuyClick, cartProducts }) => {
   return (
     <div>
-        <Sortbar options={options} productsAmount={cartProducts.length} onApply={onApply} />
-      <Cards products={cartProducts} />
+      <Sortbar options={options} products={cartProducts} onApply={onApply} />
+      <Cards onBuyClick={onBuyClick} products={cartProducts} />
     </div>
   );
 };
