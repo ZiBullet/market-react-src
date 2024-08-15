@@ -1,0 +1,42 @@
+.cart {
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    &__rows {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+    &__bottom {
+        align-self: flex-end;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+
+    }
+
+    &__total {
+        padding: 12px 10px;
+        background: var(--white);
+    }
+
+    &__btn {
+        font-size: 16px;
+        font-weight: 400;
+        padding: 12px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        border: 1px solid var(--border-cl);
+        background: transparent;
+        transition: var(--tran);
+
+        &:hover, &:focus {
+            color: var(--white);
+            background: var(--border-cl);
+        }
+    }
+}

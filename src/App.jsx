@@ -66,10 +66,19 @@ const App = () => {
     });
   };
 
+  const handleCartProductRemove = (product) => {
+    const filteredCart = cartProducts.filter(item => item.id !== product.id);
+
+    setCartProducts([...filteredCart])
+  }
+
   
 
   const handleToggleClick = () => setOpened(!opened);
   const handleCloseClick = () => setOpened(false);
+  const handleOrderClick = () => {
+    setCartProducts([]);
+  }
 
   return (
     <>
@@ -97,9 +106,10 @@ const App = () => {
             element={
               <Cart
                 cartProducts={cartProducts}
-                onBuyClick={handleBuyClick}
                 onApply={handleSelect}
                 options={options}
+                onOrderClick={handleOrderClick}
+                onCartProductRemove={handleCartProductRemove}
               />
             }
           />
