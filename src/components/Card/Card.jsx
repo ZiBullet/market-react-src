@@ -19,11 +19,11 @@ const Card = ({ product, onBuyClick }) => {
                         {
                             discountPrice ? (
                                 <>
-                                    <p className={s.old_price}>{product.price}</p>
-                                    <p className={s.price}>{discountPrice}</p>
+                                    <p className={s.old_price}>${product.price}</p>
+                                    <p className={s.price}>${discountPrice}</p>
                                 </>
                             ) : (
-                                <p className={s.price}>{product.price}</p>
+                                <p className={s.price}>${product.price}</p>
                             )
                         }
                     </div>

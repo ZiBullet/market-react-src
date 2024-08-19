@@ -1,48 +1,34 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useLocation } from "react-router-dom";
-
-import { getProducts, productsSelector } from "./store/products/productsSlice";
+import { Route, Routes } from "react-router-dom";
+import { getData, sortProducts } from "./store/products/productsSlice";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Home from "./pages/Home/Home";
 
-import { sortProducts } from "./utils/sortProducts";
 import Cart from "./pages/Cart/Cart";
 
 const App = () => {
   const dispatch = useDispatch();
-  const {pathname} = useLocation();
-  const { data, status } = useSelector(productsSelector);
-  const [products, setProducts] = useState(null);
+  const products = useSelector((state) => state.products.value)
+  const status = useSelector(state => state.products.status)
   const [opened, setOpened] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
-
+  
   const options = [
-    { type: "price", label: "По цене" },
-    { type: "title", label: "По наз-ю" },
-    { type: "quantity", label: "По кол-ву" },
+    { value: "price", label: "По цене" },
+    { value: "title", label: "По наз-ю" },
+    { value: "stock", label: "По кол-ву" },
   ];
 
-  const copyArr = (arr) => {
-    if (!arr || !Array.isArray(arr)) return;
-
-    const initArr = JSON.stringify(arr);
-    const copiedArr = JSON.parse(initArr);
-
-    return copiedArr;
-  };
-
   useEffect(() => {
-    dispatch(getProducts());
-    if (status === "ok") setProducts(copyArr(data));
-  }, [status, pathname, dispatch]);
+    dispatch(getData()); 
+  }, [dispatch, status]);
 
-  const handleSelect = (productsArr, option) => {
-    if (!productsArr || !option) return;
+  const handleSelect = (option) => {
+    if (!option) return;
 
-    const sortedProducts = sortProducts(productsArr, option.type);
-    setProducts([...sortedProducts]);
+    dispatch(sortProducts(option))
   };
 
   const handleBuyClick = (product) => {
@@ -52,16 +38,19 @@ const App = () => {
         return prev.map((item) =>
           item.id === product.id
             ? {
-                ...item,
-                quantity:
-                  item.stock > item.quantity
-                    ? item.quantity + 1
-                    : item.quantity,
-              }
+              ...item,
+              quantity:
+                item.stock > item.quantity
+                  ? item.quantity + 1
+                  : item.quantity,
+            }
             : item
         );
       } else {
-        return [...prev, { ...product, quantity: 1 }];
+        return [...prev, {
+          ...product,
+          quantity: 1,
+        }];
       }
     });
   };
@@ -72,7 +61,7 @@ const App = () => {
     setCartProducts([...filteredCart])
   }
 
-  
+
 
   const handleToggleClick = () => setOpened(!opened);
   const handleCloseClick = () => setOpened(false);

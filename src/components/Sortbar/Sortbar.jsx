@@ -38,7 +38,7 @@ const Sortbar = ({ options, onApply, products }) => {
                         </div>
                     )}
                 </div>
-                <button onClick={() => onApply(products, selectedOption)} className={s.sortbar__sorter_btn}>
+                <button onClick={() => onApply(selectedOption)} className={s.sortbar__sorter_btn}>
                     Применить
                 </button>
             </div>

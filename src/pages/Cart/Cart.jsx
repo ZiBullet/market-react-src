@@ -5,12 +5,11 @@ import { getTotalPrice } from "../../utils/getTotalPrice";
 import { useEffect } from "react";
 
 
-const Cart = ({ options, onApply, cartProducts, onOrderClick, onCartProductRemove }) => {
+const Cart = ({ cartProducts, onOrderClick, onCartProductRemove }) => {
   const totalPrice = getTotalPrice(cartProducts)
 
   return (
     <main className={s.cart}>
-      <Sortbar options={options} products={cartProducts} onApply={onApply} />
       {cartProducts.length ? (
         <>
           <div className={s.cart__rows}>

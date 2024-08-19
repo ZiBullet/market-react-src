@@ -1,34 +1,74 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+    createAsyncThunk,
+    createSlice
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-    data: null,
-    status: "idle"
+    status: 'idle',
+    isLoading: false,
+    value: null,
+    error: null
 }
 
-export const getProducts = createAsyncThunk("products/getProducts",
-    async () => {
-        let response = await axios.get("https://dummyjson.com/products?limit=100");
-        const {data} = response;
-        return data.products;
-    }
-)
+export const getData = createAsyncThunk("products/getProducts", async (_, {
+    fulfillWithValue,
+    rejectWithValue
+}) => {
+    try {
+        const result = await axios.get("https://dummyjson.com/products?limit=100")
 
-export const productsSlice = createSlice({
-    name: "productsSlice",
-    initialState,
-    reducers: {
-        
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(getProducts.fulfilled, (state, action) => {
-                state.data = action.payload;
-                state.status = "ok"
-            })
+        const data = result.data.products;
+
+        return fulfillWithValue(data)
+    } catch (error) {
+        return rejectWithValue(error.response ? error.response.data.message : error.message)
     }
 })
 
-export default productsSlice.reducer;
+export const productsSlice = createSlice({
+    name: "products",
+    initialState,
+    reducers: {
+        sortProducts: (state, action) => {
+            state.value?.sort((a, b) => {
+                const key = action.payload.value;
+                if (key === "title") {
+                    return a.title.localeCompare(b.title);
+                } else {
+                    if (a[key] > b[key]) {
+                        return -1;
+                    } else if (a[key] < b[key]) {
+                        return 1;
+                    }
 
-export const productsSelector = state => state.products;
+                    return 0
+                }
+            })
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getData.pending, (state) => {
+            state.isLoading = true;
+            state.value = null;
+            state.error = null;
+        })
+        builder.addCase(getData.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.value = action.payload;
+            state.status = action.meta.requestStatus;
+            state.error = null;
+        })
+        builder.addCase(getData.rejected, (state, action) => {
+            state.isLoading = false;
+            state.value = null;
+            state.error = action.payload;
+        })
+    }
+})
+
+export const {
+    sortProducts
+} = productsSlice.actions
+
+export default productsSlice.reducer
