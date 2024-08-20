@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { getData, sortProducts } from "./store/products/productsSlice";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Home from "./pages/Home/Home";
 
+
 import Cart from "./pages/Cart/Cart";
 import { ProductsContext } from "./context/ProductsContext";
 import { calcCurrentProducts } from "./utils/calcCurrentProducts";
+import Categories from "./pages/Categories/Categories";
+import { sortCategoryProduct } from "./store/categoryProduct/categoryProductSlice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -17,9 +20,9 @@ const App = () => {
   const [opened, setOpened] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const {currentProducts, productsPerPage} = calcCurrentProducts(products, currentPage);
-
-
+  const {productsPerPage} = calcCurrentProducts(products, currentPage);
+  const sortbarPos = useRef(null)
+  const {pathname} = useLocation()
 
   const options = [
     { value: "price", label: "По цене" },
@@ -29,12 +32,16 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getData());
-  }, [dispatch, status]);
+  }, [dispatch, status, pathname]);
 
-  const handleSelect = (option) => {
+  const handleSelect = (option, pathname) => {
     if (!option) return;
 
-    dispatch(sortProducts(option))
+    if (pathname === "/") {
+      dispatch(sortProducts(option));
+    } else if (pathname === "/categories") {
+      dispatch(sortCategoryProduct(option))
+    }
   };
 
   const handleBuyClick = (product) => {
@@ -72,8 +79,14 @@ const App = () => {
   const handleToggleClick = () => setOpened(!opened);
   const handleCloseClick = () => setOpened(false);
   const handleOrderClick = () => setCartProducts([]);
-  const handlePaginate = (pageNum) => setCurrentPage(pageNum);
-
+  const handlePaginate = (pageNum) => {
+    window.scrollTo({
+      top: sortbarPos?.current?.offsetTop - 20,
+      behavior: "smooth"
+    })
+    setCurrentPage(pageNum)
+  };
+  
 
   return (
     <>
@@ -84,15 +97,16 @@ const App = () => {
       />
       <Sidebar isOpened={opened} onCloseClick={handleCloseClick} />
       <ProductsContext.Provider value={{
+        sortbarPos,
         options,
-        products: currentProducts,
+        products,
         onApply: handleSelect,
         onBuyClick: handleBuyClick,
         onCartProductRemove: handleCartProductRemove,
         productsPerPage,
-        totalProducts: products?.length,
         onPaginate: handlePaginate,
-        currentPage: currentPage,
+        currentPage,
+        setCurrentPage
       }}>
         <div className="container">
           <Routes>
@@ -106,6 +120,7 @@ const App = () => {
                 />
               }
             />
+            <Route path="/categories" element={<Categories /> } />
           </Routes>
         </div>
       </ProductsContext.Provider>

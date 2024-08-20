@@ -2,10 +2,11 @@ import Sortbar from "../Sortbar/Sortbar"
 
 
 
-const PanelsLayout = ({children}) => {
+const PanelsLayout = ({children, totalProducts}) => {
+  
   return (
     <>
-        <Sortbar />
+        <Sortbar totalProducts={totalProducts} />
         {children}
     </>
   )

@@ -1,12 +1,17 @@
+import { useContext } from "react"
 import Cards from "../../components/Cards/Cards"
 import PanelsLayout from "../../components/PanelsLayout/PanelsLayout"
-import Sortbar from "../../components/Sortbar/Sortbar"
+import { calcCurrentProducts } from "../../utils/calcCurrentProducts"
 import s from "./Home.module.scss"
+import { ProductsContext } from "../../context/ProductsContext"
 
-const Home = ({options, onApply, onBuyClick, products}) => {
+const Home = ({}) => {
+    const {products, currentPage} = useContext(ProductsContext);
+    const {currentProducts} = calcCurrentProducts(products, currentPage);
+
     return (
-        <PanelsLayout>
-            <Cards products={products} onBuyClick={onBuyClick} />
+        <PanelsLayout totalProducts={products?.length}>
+            <Cards data={currentProducts} totalProducts={products?.length} />
         </PanelsLayout>
     )
 }

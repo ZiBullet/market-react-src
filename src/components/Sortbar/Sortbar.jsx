@@ -2,10 +2,11 @@ import { useContext, useState } from "react";
 import s from "./Sortbar.module.scss";
 import arrowIcon from "../../assets/icons/arrow.svg";
 import { ProductsContext } from "../../context/ProductsContext";
+import { useLocation } from "react-router-dom";
 
-const Sortbar = ({}) => {
-    const {options, onApply, totalProducts} = useContext(ProductsContext)
-    
+const Sortbar = ({ totalProducts }) => {
+    const { options, onApply, sortbarPos } = useContext(ProductsContext)
+    const { pathname } = useLocation()
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const clsOpened = isOpen ? s.opened : '';
@@ -18,7 +19,7 @@ const Sortbar = ({}) => {
 
 
     return (
-        <div className={s.sortbar}>
+        <div ref={sortbarPos} className={s.sortbar}>
             <div className={s.sortbar__sorter}>
                 <div className={s.sortbar__sorter_select}>
                     <button className={s.sortbar__select_box} onClick={toggleDropdown}>
@@ -41,7 +42,7 @@ const Sortbar = ({}) => {
                         </div>
                     )}
                 </div>
-                <button onClick={() => onApply(selectedOption)} className={s.sortbar__sorter_btn}>
+                <button onClick={() => onApply(selectedOption, pathname)} className={s.sortbar__sorter_btn}>
                     Применить
                 </button>
             </div>

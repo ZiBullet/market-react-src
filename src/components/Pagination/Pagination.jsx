@@ -3,8 +3,8 @@ import { ProductsContext } from "../../context/ProductsContext"
 import s from "./Pagination.module.scss"
 import { renderPagination } from "../../utils/renderPagination"
 
-const Pagination = () => {
-  const { productsPerPage, totalProducts, onPaginate, currentPage } = useContext(ProductsContext)
+const Pagination = ({totalProducts}) => {
+  const { productsPerPage, onPaginate, currentPage } = useContext(ProductsContext)
   const {renderPageNumbers, totalPages} = renderPagination(totalProducts, productsPerPage, currentPage)
 
   const handleNextClick = () => onPaginate(currentPage + 1);

@@ -1,0 +1,49 @@
+@use "../../assets/scss/mixins.scss" as *;
+
+.categories {
+    
+    &__side {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 40px;
+    }
+    
+    &__list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        
+        @include media(768px) {
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow-x: scroll;
+            
+            &::-webkit-scrollbar {
+                background: none;
+                height: 2px;
+                &-thumb {
+                    background: var(--border-cl);
+                }
+            }
+        }
+        
+        &_btn {
+            color: var(--black);
+            font-size: 16px;
+            background: var(--white);
+            padding: 12px 10px;
+            
+            @include media(768px) {
+                min-width: 200px;
+            }
+            
+            transition: var(--tran);
+            &_active {
+                color: var(--white);
+                background: var(--black);
+            }
+        }
+    }
+}
