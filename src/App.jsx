@@ -7,6 +7,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Home from "./pages/Home/Home";
 
 import Cart from "./pages/Cart/Cart";
+import { ProductsContext } from "./context/ProductsContext";
+import { calcCurrentProducts } from "./utils/calcCurrentProducts";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -14,7 +16,11 @@ const App = () => {
   const status = useSelector(state => state.products.status)
   const [opened, setOpened] = useState(false);
   const [cartProducts, setCartProducts] = useState([]);
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const {currentProducts, productsPerPage} = calcCurrentProducts(products, currentPage);
+
+
+
   const options = [
     { value: "price", label: "По цене" },
     { value: "title", label: "По наз-ю" },
@@ -22,7 +28,7 @@ const App = () => {
   ];
 
   useEffect(() => {
-    dispatch(getData()); 
+    dispatch(getData());
   }, [dispatch, status]);
 
   const handleSelect = (option) => {
@@ -65,9 +71,9 @@ const App = () => {
 
   const handleToggleClick = () => setOpened(!opened);
   const handleCloseClick = () => setOpened(false);
-  const handleOrderClick = () => {
-    setCartProducts([]);
-  }
+  const handleOrderClick = () => setCartProducts([]);
+  const handlePaginate = (pageNum) => setCurrentPage(pageNum);
+
 
   return (
     <>
@@ -77,33 +83,32 @@ const App = () => {
         isOpened={opened}
       />
       <Sidebar isOpened={opened} onCloseClick={handleCloseClick} />
-      <div className="container">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                options={options}
-                products={products}
-                onApply={handleSelect}
-                onBuyClick={handleBuyClick}
-              />
-            }
-          />
-          <Route
-            path="/cart"
-            element={
-              <Cart
-                cartProducts={cartProducts}
-                onApply={handleSelect}
-                options={options}
-                onOrderClick={handleOrderClick}
-                onCartProductRemove={handleCartProductRemove}
-              />
-            }
-          />
-        </Routes>
-      </div>
+      <ProductsContext.Provider value={{
+        options,
+        products: currentProducts,
+        onApply: handleSelect,
+        onBuyClick: handleBuyClick,
+        onCartProductRemove: handleCartProductRemove,
+        productsPerPage,
+        totalProducts: products?.length,
+        onPaginate: handlePaginate,
+        currentPage: currentPage,
+      }}>
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cartProducts={cartProducts}
+                  onOrderClick={handleOrderClick}
+                />
+              }
+            />
+          </Routes>
+        </div>
+      </ProductsContext.Provider>
     </>
   );
 };

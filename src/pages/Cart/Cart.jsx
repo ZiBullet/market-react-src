@@ -5,7 +5,7 @@ import { getTotalPrice } from "../../utils/getTotalPrice";
 import { useEffect } from "react";
 
 
-const Cart = ({ cartProducts, onOrderClick, onCartProductRemove }) => {
+const Cart = ({ cartProducts, onOrderClick }) => {
   const totalPrice = getTotalPrice(cartProducts)
 
   return (
@@ -14,7 +14,7 @@ const Cart = ({ cartProducts, onOrderClick, onCartProductRemove }) => {
         <>
           <div className={s.cart__rows}>
             {cartProducts.map((item, idx) => (
-              <CartItem onCartProductRemove={onCartProductRemove} key={idx} product={item} />
+              <CartItem key={idx} product={item} />
             ))}
           </div>
           <p className={s.cart__bottom}>

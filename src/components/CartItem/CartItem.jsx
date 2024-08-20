@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { getDiscount } from "../../utils/getDiscount";
 import s from "./CartItem.module.scss";
+import { ProductsContext } from "../../context/ProductsContext";
 
-const CartItem = ({ product, onCartProductRemove }) => {
+const CartItem = ({product}) => {
+  const {onCartProductRemove} = useContext(ProductsContext)
+  
   const discountPrice = getDiscount(
     product.price,
     product.discountPercentage

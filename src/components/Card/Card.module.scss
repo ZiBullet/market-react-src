@@ -1,3 +1,5 @@
+@use "../../assets/scss/mixins.scss"as *;
+
 .card {
     display: flex;
     flex-direction: column;
@@ -7,8 +9,9 @@
 
     padding: 20px 16px;
     background: var(--white);
-    
-    &:hover, &:focus {
+
+    &:hover,
+    &:focus {
         border: 1px solid var(--btn-cl);
     }
 
@@ -30,6 +33,10 @@
         gap: 20px;
 
         &_title {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
             color: var(--btn-cl);
             font-size: 16px;
             font-weight: 400;
@@ -39,6 +46,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
+            @include media(666px) {
+                align-items: baseline;
+                flex-direction: column;
+                gap: 15px;
+            }
         }
 
         &_price {
@@ -69,10 +82,15 @@
             font-size: 16px;
             font-weight: 400;
             transition: var(--tran);
-            
-            &:hover, &:focus {
+
+            &:hover,
+            &:focus {
                 color: var(--white);
                 background: var(--btn-cl);
+            }
+
+            @include media(666px) {
+                align-self: flex-end;
             }
         }
 

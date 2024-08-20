@@ -1,0 +1,76 @@
+@use "../../assets/scss/mixins.scss" as *;
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    user-select: none;
+
+    @include media(666px) {
+        gap: 10px;       
+    }
+    
+    &__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        background: var(--white);
+        transition: var(--tran);
+
+
+        &:hover,
+        &:focus-visible {
+            color: var(--white);
+            background: var(--btn-cl);
+        }
+
+        &:disabled {
+            cursor: default;
+            color: var(--white);
+            opacity: 0.4;
+            background: var(--black);
+        }
+        
+        
+    }
+
+    &__nums {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        @include media(666px) {
+            gap: 10px;       
+        }
+        
+        &_btn {
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            opacity: 0.8;
+            transition: var(--tran);
+
+            &:hover,
+            &:focus-visible {
+                color: var(--white);
+                background: var(--btn-cl);
+                opacity: 1;
+            }
+        }
+
+        &_active {
+            color: var(--white);
+            background: var(--btn-cl);
+            opacity: 1;
+        }
+    }
+}

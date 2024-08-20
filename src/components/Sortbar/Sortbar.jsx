@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import s from "./Sortbar.module.scss";
 import arrowIcon from "../../assets/icons/arrow.svg";
+import { ProductsContext } from "../../context/ProductsContext";
 
-const Sortbar = ({ options, onApply, products }) => {
+const Sortbar = ({}) => {
+    const {options, onApply, totalProducts} = useContext(ProductsContext)
+    
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const clsOpened = isOpen ? s.opened : '';
@@ -42,7 +45,7 @@ const Sortbar = ({ options, onApply, products }) => {
                     Применить
                 </button>
             </div>
-            <p className={s.sortbar__text}>Общее кол-во товаров-<span>{products?.length}</span></p>
+            <p className={s.sortbar__text}>Общее кол-во товаров-<span>{totalProducts}</span></p>
         </div>
     )
 }
